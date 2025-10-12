@@ -1,5 +1,8 @@
 namespace as_webApp_helloWorld
 {
+    using Microsoft.ApplicationInsights;
+    using Microsoft.Extensions.DependencyInjection;
+
     public class Program
     {
         public static void Main(string[] args)
@@ -8,6 +11,7 @@ namespace as_webApp_helloWorld
 
             // Add services to the container.
             builder.Services.AddControllersWithViews();
+            builder.Services.AddApplicationInsightsTelemetry();
 
             var app = builder.Build();
 
