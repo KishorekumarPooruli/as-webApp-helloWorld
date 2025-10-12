@@ -20,7 +20,7 @@ namespace as_webApp_helloWorld.Controllers
 
         public IActionResult Privacy()
         {
-            return View();
+            throw new Exception("Testing");
         }
 
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
