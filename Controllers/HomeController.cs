@@ -1,6 +1,7 @@
 using as_webApp_helloWorld.Models;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Channel;
+using Microsoft.ApplicationInsights.DataContracts;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 
@@ -15,6 +16,7 @@ namespace as_webApp_helloWorld.Controllers
         {
             _logger = logger;
             _telemetryClient = telemetryClient;
+            _telemetryClient.TrackTrace($"InstrumentationKey Registered: {_telemetryClient.TelemetryConfiguration.InstrumentationKey}", SeverityLevel.Critical);
         }
 
         public IActionResult Index()
