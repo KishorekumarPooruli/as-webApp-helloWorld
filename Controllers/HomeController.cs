@@ -21,12 +21,13 @@ namespace as_webApp_helloWorld.Controllers
 
         public IActionResult Index()
         {
-            _telemetryClient.TrackEvent("Index Page Viewed");
+            //// _telemetryClient.TrackEvent("Index Page Viewed");
             return View();
         }
 
         public IActionResult Privacy()
         {
+            ////return View();
             throw new Exception("Testing");
         }
 
