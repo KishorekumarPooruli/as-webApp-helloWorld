@@ -1,5 +1,7 @@
 namespace as_webApp_helloWorld
 {
+    using as_webApp_helloWorld.Services;
+    using as_webApp_helloWorld.Services.Interface;
     using Microsoft.ApplicationInsights;
     using Microsoft.Extensions.DependencyInjection;
 
@@ -10,6 +12,7 @@ namespace as_webApp_helloWorld
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+            builder.Services.AddScoped<ITableStorageService, TableStorageService>(); //// REGISTERING CONTAINER
             builder.Services.AddControllersWithViews();
             builder.Services.AddApplicationInsightsTelemetry();
 
