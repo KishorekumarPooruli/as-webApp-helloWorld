@@ -4,7 +4,6 @@
     using as_webApp_helloWorld.Services.Interface;
     using Azure;
     using Azure.Data.Tables;
-
     public class TableStorageService : ITableStorageService
     {
         private const string TableName = "Attendees";
@@ -47,7 +46,7 @@
             var serviceClient = new TableServiceClient(_configuration["StorageConnectionString"]);
             var tableClient = serviceClient.GetTableClient(TableName);
             await tableClient.CreateIfNotExistsAsync();
-            return tableClient;
+             return tableClient;
         }
         #endregion
     }

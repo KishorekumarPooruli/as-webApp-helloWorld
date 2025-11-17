@@ -13,6 +13,10 @@
     <thead>
         <tr>
             <th>
+               ProfileImage
+            </th>
+
+            @* <th>
                 @Html.DisplayNameFor(model => model.PartitionKey)
             </th>
             <th>
@@ -20,7 +24,7 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Timestamp)
-            </th>
+            </th> *@
             <th>
                 @Html.DisplayNameFor(model => model.FirstName)
             </th>
@@ -36,7 +40,10 @@
     <tbody>
 @foreach (var item in Model) {
         <tr>
-            <td>
+                <td>
+                    <img src="@item.ProfileImage" width="50" height="50" />
+                </td>
+            @* <td>
                 @Html.DisplayFor(modelItem => item.PartitionKey)
             </td>
             <td>
@@ -44,7 +51,7 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Timestamp)
-            </td>
+            </td> *@
             <td>
                 @Html.DisplayFor(modelItem => item.FirstName)
             </td>
@@ -55,11 +62,14 @@
                 @Html.DisplayFor(modelItem => item.EmailAddress)
             </td>
             <td>
-                    @Html.ActionLink("Edit", "Edit", new { partitionKey = item.PartitionKey, rowId = item.RowKey }) |
-                    @Html.ActionLink("Details", "Details", new { partitionKey = item.PartitionKey, rowKey = item.RowKey }) |
+                    
                     <form asp-action="Delete">
                         <input type="hidden" value="@item.PartitionKey" name="partitionKey" />
                         <input type="hidden" value="@item.RowKey" name="rowId" />
+                        @Html.ActionLink("Edit", "Edit", new { partitionKey = item.PartitionKey, rowId = item.RowKey }, new {@class="btn btn-warning"})
+
+                        @Html.ActionLink("Details", "Details", new { partitionKey = item.PartitionKey, rowKey = item.RowKey }, new { @class = "btn btn-primary" })
+
                         <input type="submit" class="btn btn-danger" />
                     </form>
                     @* @Html.ActionLink("Delete", "Delete", new { emailAddress = item.PartitionKey, id = item.RowKey })) *@
