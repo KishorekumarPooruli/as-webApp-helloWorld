@@ -13,7 +13,8 @@ namespace as_webApp_helloWorld
 
             // Add services to the container.
             builder.Services.AddScoped<ITableStorageService, TableStorageService>(); //// REGISTERING CONTAINER
-            builder.Services.AddScoped<IBlobStorageService, BlobStorageService>(); 
+            builder.Services.AddScoped<IBlobStorageService, BlobStorageService>();
+            builder.Services.AddScoped<IQueueStorageService, QueueStorageService>();
             builder.Services.AddControllersWithViews();
             builder.Services.AddApplicationInsightsTelemetry();
 

@@ -45,7 +45,7 @@ namespace as_webApp_helloWorld.Services
             {
                 BlobContainerName = blob.BlobContainerName,
                 BlobName = blob.Name,
-                ExpiresOn = DateTime.UtcNow.AddMilliseconds(500),
+                ExpiresOn = DateTime.UtcNow.AddMinutes(1),
                 Protocol = SasProtocol.Https,
                 Resource = "b"
             };

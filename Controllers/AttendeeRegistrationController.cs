@@ -1,6 +1,7 @@
 ﻿using as_webApp_helloWorld.DataModels;
 using as_webApp_helloWorld.Services.Interface;
 using Microsoft.AspNetCore.Mvc;
+using System.Net.Mail;
 
 namespace as_webApp_helloWorld.Controllers
 {
@@ -8,11 +9,16 @@ namespace as_webApp_helloWorld.Controllers
     {
         private readonly ITableStorageService tableStorageService;
         private readonly IBlobStorageService blobStorageService;
+        private readonly IQueueStorageService queueStorageService;
 
-        public AttendeeRegistrationController(ITableStorageService tableStorageService, IBlobStorageService blobStorageService)
+        public AttendeeRegistrationController(
+            ITableStorageService tableStorageService,
+            IBlobStorageService blobStorageService,
+            IQueueStorageService queueStorageService)
         {
             this.tableStorageService = tableStorageService;
             this.blobStorageService = blobStorageService;
+            this.queueStorageService = queueStorageService;
         }
 
         // GET: AttendeeRegistrationController
@@ -50,8 +56,7 @@ namespace as_webApp_helloWorld.Controllers
             {
                 attendeeEntity.PartitionKey = attendeeEntity.EmailAddress;
                 attendeeEntity.RowKey = Guid.NewGuid().ToString();
-                
-
+ 
                 if (formFile.Length > 0) 
                 {
                     attendeeEntity.ProfileImage = await blobStorageService.UploadBlobFile(formFile, attendeeEntity.RowKey); 
@@ -62,6 +67,15 @@ namespace as_webApp_helloWorld.Controllers
                 }
 
                 await this.tableStorageService.UpdateAttendee(attendeeEntity);
+                EmailMessage emailMessage = new EmailMessage()
+                {
+                    EmailAddress = attendeeEntity.PartitionKey,
+                    MessageContent = $"Hello I have Submited the Registeration Form - " +
+                    $"{attendeeEntity.FirstName + attendeeEntity.LastName}",
+                    TimeStamp = DateTime.UtcNow
+                };
+
+                await this.queueStorageService.SendMessage(emailMessage);
                 return RedirectToAction(nameof(Index));
             }
             catch
@@ -92,7 +106,15 @@ namespace as_webApp_helloWorld.Controllers
                 }
 
                 await this.tableStorageService.UpdateAttendee(attendeeEntity);
-               
+                EmailMessage emailMessage = new EmailMessage()
+                {
+                    EmailAddress = attendeeEntity.PartitionKey,
+                    MessageContent = $"Hello I have Edited the Registeration Form - " +
+                     $"{attendeeEntity.FirstName + attendeeEntity.LastName}",
+                    TimeStamp = DateTime.UtcNow
+                };
+
+                await this.queueStorageService.SendMessage(emailMessage);
 
                 return RedirectToAction(nameof(Index));
             }
@@ -112,6 +134,15 @@ namespace as_webApp_helloWorld.Controllers
                 var data = await this.tableStorageService.GetAttendeeEntity(partitionKey, rowId);
                 await this.tableStorageService.DeleteAttendee(partitionKey, rowId);
                 await this.blobStorageService.RemoveBlob(data.ProfileImage);
+                EmailMessage emailMessage = new EmailMessage()
+                {
+                    EmailAddress = partitionKey,
+                    MessageContent = $"Hello I have Deleted the Registeration Form - " +
+                 $"{partitionKey}",
+                    TimeStamp = DateTime.UtcNow
+                };
+
+                await this.queueStorageService.SendMessage(emailMessage);
                 return RedirectToAction(nameof(Index));
             }
             catch
